@@ -7,7 +7,7 @@
     define('DB_HOST','localhost');
     define('DB_USER','root');
     define('DB_PASS','');
-    define('DB_NAME','hope_first');
+    define('DB_NAME','scolarite');
 
     // Establish database connection.
     try {
