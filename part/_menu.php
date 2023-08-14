@@ -44,6 +44,11 @@
         <i class="fas fa-fw fa-book"></i>
         <span>Dossiers</span></a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" href="users/">
+        <i class="fas fa-fw fa-book"></i>
+        <span>Authentification</span></a>
+</li>
 
 <!-- Divider -->
 <hr class="sidebar-divider">

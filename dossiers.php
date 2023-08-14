@@ -35,78 +35,88 @@
 
 
        <?php 
-
 if (isset($_POST['submit'])) {
     extract($_POST);
-    $ref_annee = htmlspecialchars($_POST['ref_annee']);
-    $ref_classe = htmlspecialchars($_POST['ref_classe']);
-    $ref_eleve = htmlspecialchars($_POST['ref_eleve']);
-    $ref_option = htmlspecialchars($_POST['ref_option']);
+    $ref_inscription = htmlspecialchars($_POST['ref_inscription']);
+	
+    $fileName = $_FILES['file']['name'];
+     $fileTmpName = $_FILES['file']['tmp_name'];
+       
+       $path = "docs/".$fileName;
+
+            $check_query = "SELECT * FROM dossiers 
+            WHERE filename=:filename
+           ";
+          $statement = $db->prepare($check_query);
+          $check_data = array(
+           
+             ':filename'   =>  $fileName            
+          );
+           if($statement->execute($check_data))  
+         {
+            if($statement->rowCount() > 1)
+             {
+                echo "
+                <script>
+                         Swal.fire({
+                          icon: 'error',
+                           title: 'Oops...',
+                      text: 'Cet dossier existe deja!',
+                         footer: ''
+                          })
+                  </script>
+                ";             
+            }
+        
+          else
+            {
+            if ($statement->rowCount() == 0 ) {
+
+				
+  
+ 
+
+  $req=$db->prepare("INSERT INTO dossiers (filename,ref_inscription,ref_agent) VALUES (:filename,:ref_inscription,:ref_agent)");
+
+  $res=$req->execute(array(
+    'ref_inscription' => $ref_inscription,    
+    'filename' => $fileName,
+    'ref_agent' => $_SESSION['PROFILE']['id_utilisateur']
     
-    $check_query = " SELECT * FROM inscription 
-    WHERE ref_eleve=:ref_eleve
-   ";
-  $statement = $db->prepare($check_query);
-  $check_data = array(
-     ':ref_eleve' =>  $ref_eleve    
-  );
-  if($statement->execute($check_data))  
- {
-    if($statement->rowCount() > 0)
-     {
-        echo "<script>
-                 Swal.fire({
-                  icon: 'error',
-                   title: 'Oops...',
-              text: 'Cet eleve existe deja!',
-                 footer: ''
-                  })
-          </script>";
-     }
-
-  else
-  {
-    if ($statement->rowCount() == 0 ) {
-        $rre=$db->prepare("INSERT INTO inscription (ref_eleve,ref_annee,ref_option,ref_classe) VALUES (:ref_eleve,:ref_annee,:ref_option,:ref_classe)");
-
-        $resul=$rre->execute(array(
-            'ref_eleve' => $ref_eleve,
-            'ref_annee' => $ref_annee,
-            'ref_option' => $ref_option,
-            'ref_classe' => $ref_classe            
-        ));
-        if ($resul) {
-            echo "<script>
-                Swal.fire({
-                     position: 'top-end',
-                     icon: 'success',
-                     title: 'Eleve inserer avec success',
-                    showConfirmButton: false,
-                     timer: 1500
-                   })
-
-            </script>";
-        }else{
-             echo "<script>
-                     Swal.fire({
-                      icon: 'error',
-                       title: 'Oops...',
-                  text: 'eleve non inserer!',
-                     footer: ''
-                      })
-              </script>";
-
-        }
-        }
-    }
-}
-}
-     
-   
-
     
+    
+  ));
+  if ($res) {
+	move_uploaded_file($fileTmpName,$path);
+     echo "
+     <script>
+     Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Apelle d'offre envoyer avec success',
+      showConfirmButton: false,
+      timer: 1500
+    })
+     </script>
+     ";
+  }else{
+      echo "<script>
+                         Swal.fire({
+                          icon: 'error',
+                           title: 'Oops...',
+                      text: 'Apelle non envoyer!',
+                         footer: ''
+                          })
+                  </script>";
+  }
+  }
+  }
+  }
+}
 
-?>
+
+
+ ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -208,53 +218,25 @@ if (isset($_POST['submit'])) {
                         
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST">
+                        <form action="" method="POST" enctype="multipart/form-data">
                           
                           <div class="row">
                           <div class="col-md-6">
-                          <?php $reque=$db->query("SELECT * FROM eleves ORDER BY nom_complet ASC"); ?>
-                               <select class="form-control" name="ref_eleve" id="">
+                          <?php $reque=$db->query("SELECT * FROM inscription INNER JOIN eleves ON inscription.ref_eleve=eleves.id_eleves"); ?>
+                               <select class="form-control" name="ref_inscription" id="">
                                
                                <option value="">--Eleves--</option>
                                     <?php while ($gg = $reque->fetch()) { ?>
-                                <option value="<?= $gg['id_eleves'];?>"><?= $gg['nom_complet'];?> </option>
+                                <option value="<?= $gg['id_inscription'];?>"><?= $gg['nom_complet'];?> </option>
                                 <?php } ?>
                                </select>
                               </div>
                               <div class="col-md-6">
-                              <?php $reqa=$db->query("SELECT * FROM annee"); ?>
-                              <select class="form-control" name="ref_annee" id="">
-                               
-                               <option value="">--Annee scolaire--</option>
-                                    <?php while ($ga = $reqa->fetch()) { ?>
-                                <option value="<?= $ga['id_annee'];?>"><?= $ga['anne'];?></option>
-                                <?php } ?>
-                               </select>
+                              <input class="form-control" type="file" name="file">
                            </div>
                           </div>
-                          <br>
-                          <div class="row">
-                          <div class="col-md-6">
-                          <?php $reqcl=$db->query("SELECT * FROM classe"); ?>
-                          <select class="form-control" name="ref_classe" id="">
-                               
-                               <option>--Classe--</option>
-                                    <?php while ($gl = $reqcl->fetch()) { ?>
-                                <option value="<?= $gl['id_classe'];?>"><?= $gl['nom_classe'];?></option>
-                                <?php } ?>
-                               </select>
-                              </div>
-                              <div class="col-md-6">
-                              <?php $reqo=$db->query("SELECT * FROM options"); ?>
-                              <select class="form-control" name="ref_option" id="">
-                               
-                               <option>--Options--</option>
-                                    <?php while ($go = $reqo->fetch()) { ?>
-                                <option value="<?= $go['id_option'];?>"><?= $go['nom_option'];?></option>
-                                <?php } ?>
-                               </select>
-                           </div>
-                          </div>
+                         
+                          
                           
                            
                         
