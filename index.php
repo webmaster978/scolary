@@ -1,3 +1,6 @@
+<?php 
+require "config/database.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +25,68 @@
 
 </head>
 
+<?php
+
+   
+if(isset($_SESSION['PROFILE']['id_utilisateur'])) {
+    switch ($_SESSION['PROFILE']['designation']) {
+        
+        
+        case 'admin':
+            header('location: dashboard');
+        break;
+        
+        
+        default:
+            header('location: ./');
+            die('aucune service');
+        break;
+    }
+}
+
+if(isset($_POST['btn_sub'])) {
+    extract($_POST);
+    $sql = "SELECT * FROM authentification  WHERE (username=:username OR email=:email) AND password=:password";
+    $req = $db->prepare($sql);
+    $req->execute([
+        'username' => htmlspecialchars(trim($username)),
+        'email' => $username,
+        'password' => sha1($password)
+    ]);
+    
+    if($informations = $req->fetch()) { /*Si l'adresse et le mot de passe sont vrai*/
+        $_SESSION['TMP_PROFILE'] = $informations;
+        //echo $_SESSION['TMP_PROFILE']['ref_utilisateur'];
+        
+        $recup_informations = $db->prepare("SELECT * FROM fonction INNER JOIN tbl_agent ON fonction.id_fonction=tbl_agent.ref_fonction WHERE id_utilisateur=:id_utilisateur");
+        $recup_informations->execute([
+        'id_utilisateur' => $_SESSION['TMP_PROFILE']['ref_utilisateur']
+        ]);
+
+        while($session = $recup_informations->fetch()) {
+            $_SESSION['PROFILE'] = $session;
+        }
+        
+        switch ($_SESSION['PROFILE']['designation']) {
+             
+           
+             case 'admin':
+            header('location: dashboard');
+             break;
+             
+            default:
+                header('location: ./');
+                die('aucune service');
+            break;
+        }
+    }
+    else{
+        $error = '';
+    }
+}
+
+?>
+
 <body class="bg-gradient-primary">
 
     <div class="container">
@@ -35,21 +100,31 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6 d-none d-lg-block"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+
+                                        <div id="errorConnection" style="margin-top: 30px; margin-bottom: 30px">
+                                    <?php if(isset($error)) : ?>
+                                    <div class="alert alert-danger" onclick="document.querySelector('#errorConnection').style.display = 'none';">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span style="color: red"><b>Informations incorrectes !</b></span>
                                     </div>
-                                    <form class="user">
+                                    <?php endif; ?>
+                                </div> 
+                                    </div>
+                                    <form class="user" method="POST">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
+                                            <input type="text" name="username" value="<?= (isset($username)) ? $username : ''; ?>" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Nom d'utilisateur ou mail">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                            <input type="password" name="password" value="<?= (isset($password)) ? $password : ''; ?>" class="form-control form-control-user"
+                                                id="exampleInputPassword" placeholder="Mot de passe">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -58,9 +133,9 @@
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" name="btn_sub" class="btn btn-primary btn-user btn-block">
                                             Se connecter
-                                        </a>
+                                        </button>
                                         <hr>
                                       
                                     </form>
