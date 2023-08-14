@@ -126,15 +126,13 @@ if (isset($_POST['submit'])) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Liste des options</h1>
+                   
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Options</h6>
                            
                         <div class="col" align="right">
                           <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i></button>
@@ -148,7 +146,8 @@ if (isset($_POST['submit'])) {
                                     <thead>
                                         <tr>
                                             
-                                            <th>Annee scolaire</th>
+                                            <th>Num option</th>
+                                            <th>Option</th>
                                             <th>Date creation</th>
                                             
                                         </tr>
@@ -156,7 +155,8 @@ if (isset($_POST['submit'])) {
                                     <tfoot>
                                         <tr>
                                         
-                                            <th>Annee scolaire</th>
+                                        <th>Num option</th>
+                                            <th>Option</th>
                                             <th>Date creation</th>
                                         </tr>
                                     </tfoot>
@@ -167,6 +167,7 @@ if (isset($_POST['submit'])) {
                                             
                                             <td><?= $g['id_option']; ?></td>
                                             <td><?= $g['nom_option']; ?></td>
+                                            <td><?= $g['created_option']; ?></td>
                                             
                                         </tr>
                                         <?php } ?>
@@ -206,7 +207,7 @@ if (isset($_POST['submit'])) {
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Nouvelle annee</h5>
+                    <h5 class="modal-title" id="myModalLabel">Nouvel option</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
                         
                     </div>
@@ -216,7 +217,7 @@ if (isset($_POST['submit'])) {
                           <div class="row">
                           <div class="col-md-12">
                             
-                               <input class="form-control" name="nom_option" type="text" placeholder="Nouvelle annee">
+                               <input class="form-control" name="nom_option" type="text" placeholder="Nouvelle option">
                               </div>
                               <br>
                             

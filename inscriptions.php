@@ -123,15 +123,13 @@ if (isset($_POST['submit'])) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Liste des eleves inscripts</h1>
+                    
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Inscription</h6>
                            
                         <div class="col" align="right">
                           <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i></button>
@@ -145,25 +143,48 @@ if (isset($_POST['submit'])) {
                                     <thead>
                                         <tr>
                                             
+                                            <th>Nom de l'eleve</th>
+                                            <th>Classe </th>
+                                            <th>Options</th>
                                             <th>Annee scolaire</th>
-                                            <th>Date creation</th>
+                                            <th>Date inscription</th>
+                                            <th>Action</th>
+
                                             
                                         </tr>
                                     </thead>
                                     <tfoot>
-                                        <tr>
+                                        <!-- <tr>
                                         
                                             <th>Annee scolaire</th>
                                             <th>Date creation</th>
-                                        </tr>
+                                        </tr> -->
                                     </tfoot>
                                     <tbody>
-                                    <?php $requete=$db->query("SELECT * FROM annee"); ?>
-                                    <?php while ($g = $requete->fetch()) { ?>
+                                    <?php $requete=$db->query("SELECT * FROM inscription INNER JOIN eleves ON inscription.ref_eleve=eleves.id_eleves INNER JOIN annee ON inscription.ref_annee=annee.id_annee INNER JOIN classe ON inscription.ref_classe=classe.id_classe INNER JOIN options ON inscription.ref_option=options.id_option"); ?>
+                                    <?php while ($g = $requete->fetch()) {
+                                        
+                                        $ss= $g['nom_classe'];
+                                        $te = "";
+                                        if($ss == '1'){ 
+                                           $te="<span>ere</span>";
+                                        } else {
+                                            $te="<span>eme</span>";
+                                        }
+
+                                        
+                                        ?>
                                         <tr>
                                             
+                                            
+                                            <td><?= $g['nom_complet']; ?></td>
+                                            <td><?= $g['nom_classe']; ?> <?php echo $te; ?></td>
+                                            <td><?= $g['nom_option']; ?></td>
                                             <td><?= $g['anne']; ?></td>
-                                            <td><?= $g['created_annee']; ?></td>
+                                            <td><?= $g['created_inscri']; ?></td>
+                                            <td>
+                                            <button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-pen"></i></button>
+                                            </td>
                                             
                                         </tr>
                                         <?php } ?>
