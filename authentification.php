@@ -35,88 +35,76 @@
 
 
        <?php 
+
 if (isset($_POST['submit'])) {
     extract($_POST);
-    $ref_inscription = htmlspecialchars($_POST['ref_inscription']);
-	
-    $fileName = $_FILES['file']['name'];
-     $fileTmpName = $_FILES['file']['tmp_name'];
-       
-       $path = "docs/".$fileName;
-
-            $check_query = "SELECT * FROM dossiers 
-            WHERE ref_inscription=:ref_inscription
-           ";
-          $statement = $db->prepare($check_query);
-          $check_data = array(
-           
-             ':ref_inscription'   =>  $ref_inscription            
-          );
-           if($statement->execute($check_data))  
-         {
-            if($statement->rowCount() > 1)
-             {
-                echo "
-                <script>
-                         Swal.fire({
-                          icon: 'error',
-                           title: 'Oops...',
-                      text: 'Cet dossier existe deja!',
-                         footer: ''
-                          })
-                  </script>
-                ";             
-            }
-        
-          else
-            {
-            if ($statement->rowCount() == 0 ) {
-
-				
-  
- 
-
-  $req=$db->prepare("INSERT INTO dossiers (filename,ref_inscription,ref_agent) VALUES (:filename,:ref_inscription,:ref_agent)");
-
-  $res=$req->execute(array(
-    'ref_inscription' => $ref_inscription,    
-    'filename' => $fileName,
-    'ref_agent' => $_SESSION['PROFILE']['id_utilisateur']
+    $id_eleve = htmlspecialchars($_POST['id_eleve']);
+    $montant = htmlspecialchars($_POST['montant']);
     
     
-    
-  ));
-  if ($res) {
-	move_uploaded_file($fileTmpName,$path);
-     echo "
-     <script>
-     Swal.fire({
-      position: 'top-end',
-      icon: 'success',
-      title: 'Apelle d'offre envoyer avec success',
-      showConfirmButton: false,
-      timer: 1500
-    })
-     </script>
-     ";
-  }else{
-      echo "<script>
-                         Swal.fire({
-                          icon: 'error',
-                           title: 'Oops...',
-                      text: 'Apelle non envoyer!',
-                         footer: ''
-                          })
-                  </script>";
-  }
-  }
-  }
-  }
+    $check_query = " SELECT * FROM payement
+    WHERE id_eleve=:id_eleve
+   ";
+  $statement = $db->prepare($check_query);
+  $check_data = array(
+     ':id_eleve' =>  $id_eleve    
+  );
+  if($statement->execute($check_data))  
+ {
+    if($statement->rowCount() > 0)
+     {
+        echo "<script>
+                 Swal.fire({
+                  icon: 'error',
+                   title: 'Oops...',
+              text: 'Cet payement existe deja!',
+                 footer: ''
+                  })
+          </script>";
+     }
+
+  else
+  {
+    if ($statement->rowCount() == 0 ) {
+        $rre=$db->prepare("INSERT INTO payement (id_eleve,montant) VALUES (:id_eleve,:montant)");
+
+        $resul=$rre->execute(array(
+            'id_eleve' => $id_eleve,
+            'montant' => $montant
+                       
+        ));
+        if ($resul) {
+            echo "<script>
+                Swal.fire({
+                     position: 'top-end',
+                     icon: 'success',
+                     title: 'Eleve inserer avec success',
+                    showConfirmButton: false,
+                     timer: 1500
+                   })
+
+            </script>";
+        }else{
+             echo "<script>
+                     Swal.fire({
+                      icon: 'error',
+                       title: 'Oops...',
+                  text: 'eleve non inserer!',
+                     footer: ''
+                      })
+              </script>";
+
+        }
+        }
+    }
 }
+}
+     
+   
 
+    
 
-
- ?>
+?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -133,13 +121,13 @@ if (isset($_POST['submit'])) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Liste des dossiers</h1>
-                  
+                    <h1 class="h3 mb-2 text-gray-800">Liste des eleves inscripts</h1>
+                    
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Dossiers</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Inscription</h6>
                            
                         <div class="col" align="right">
                           <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i></button>
@@ -154,24 +142,45 @@ if (isset($_POST['submit'])) {
                                         <tr>
                                             
                                             <th>Nom de l'eleve</th>
-                                            <th>Date Dossier</th>
+                                           
+                                            <th>Montant</th>
+                                            <th>Date payement</th>
+                                            <th>Action</th>
+
                                             
                                         </tr>
                                     </thead>
                                     <tfoot>
-                                        <tr>
-                                        
-                                            <th>Annee scolaire</th>
-                                            <th>Date creation</th>
+                                    <tr>
+                                            
+                                            <th>Nom de l'eleve</th>
+                                           
+                                            <th>Montant</th>
+                                            <th>Date payement</th>
+                                            <th>Action</th>
+
+                                            
                                         </tr>
+                                       
                                     </tfoot>
                                     <tbody>
-                                    <?php $requete=$db->query("SELECT * FROM dossiers INNER JOIN eleves ON dossiers.ref_inscription=eleves.id_eleves"); ?>
-                                    <?php while ($g = $requete->fetch()) { ?>
+                                    <?php $requete=$db->query("SELECT * FROM payement INNER JOIN eleves ON payement.id_eleve=eleves.id_eleves"); ?>
+                                    <?php while ($g = $requete->fetch()) {
+                                        
+                                        
+
+                                        
+                                        ?>
                                         <tr>
                                             
+                                            
                                             <td><?= $g['nom_complet']; ?></td>
-                                            <td><a href="docs/<?= $g['filename']; ?>"> <?= $g['filename']; ?> <i class="fa fa-eye"></i></a> </td>
+                                            
+                                            <td><?= $g['montant']; ?> $</td>
+                                            <td><?= $g['created_p']; ?></td>
+                                            <td>
+                                            <button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-pen"></i></button>
+                                            </td>
                                             
                                         </tr>
                                         <?php } ?>
@@ -211,29 +220,29 @@ if (isset($_POST['submit'])) {
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Nouveau dossier</h5>
+                    <h5 class="modal-title" id="myModalLabel">Nouvelle inscription</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
                         
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="" method="POST">
                           
                           <div class="row">
                           <div class="col-md-6">
-                          <?php $reque=$db->query("SELECT * FROM inscription INNER JOIN eleves ON inscription.ref_eleve=eleves.id_eleves"); ?>
-                               <select class="form-control" name="ref_inscription" id="">
+                          <?php $reque=$db->query("SELECT * FROM eleves ORDER BY nom_complet ASC"); ?>
+                               <select class="form-control" name="id_eleve" id="">
                                
                                <option value="">--Eleves--</option>
                                     <?php while ($gg = $reque->fetch()) { ?>
-                                <option value="<?= $gg['id_inscription'];?>"><?= $gg['nom_complet'];?> </option>
+                                <option value="<?= $gg['id_eleves'];?>"><?= $gg['nom_complet'];?> </option>
                                 <?php } ?>
                                </select>
                               </div>
                               <div class="col-md-6">
-                              <input class="form-control" type="file" name="file">
+                              <input class="form-control" type="number" name="montant">
                            </div>
                           </div>
-                         
+                          <br>
                           
                           
                            
