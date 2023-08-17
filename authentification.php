@@ -1,3 +1,52 @@
+<?php
+
+include 'config/data.php';
+
+session_start();
+
+if(isset($_POST['submit'])){
+
+   $name = mysqli_real_escape_string($conn, $_POST['name']);
+   $email = mysqli_real_escape_string($conn, $_POST['email']);
+   $pass = $_POST['password'];
+  
+   $user_type = $_POST['user_type'];
+
+   $select = " SELECT * FROM eleves WHERE email = '$email' && password = '$pass' ";
+
+   $result = mysqli_query($conn, $select);
+
+   if(mysqli_num_rows($result) > 0){
+
+      $row = mysqli_fetch_array($result);
+
+      if($row['user_type'] == 'admin'){
+
+         $_SESSION['admin_name'] = $row['name'];
+         header('location:admin/');
+
+      }elseif($row['user_type'] == 'user'){
+
+       
+         $_SESSION['user_email'] = $row['email'];
+         $_SESSION['id_user'] = $row['id_eleves'];
+         $_SESSION['user_name'] = $row['nom_complet'];
+         $_SESSION['user_sexe'] = $row['sexe'];
+         $_SESSION['user_date_naiss'] = $row['date_naiss'];
+         $_SESSION['user_responsable'] = $row['responsable'];
+         $_SESSION['user_contact'] = $row['contact'];
+         $_SESSION['adresse'] = $row['adresse'];
+         $_SESSION['user_photo'] = $row['photo'];
+         header('location:users/');
+
+      }
+     
+   }else{
+      $error[] = 'incorrect email or password!';
+   }
+
+};
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,253 +58,83 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>SB Admin 2 - Login</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
-<body id="page-top">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+<body class="bg-gradient-primary">
 
-        <!-- Sidebar -->
-       <?php include 'part/_menu.php' ?>
+    <div class="container">
 
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
 
-       <?php 
+            <div class="col-xl-10 col-lg-12 col-md-9">
 
-if (isset($_POST['submit'])) {
-    extract($_POST);
-    $id_eleve = htmlspecialchars($_POST['id_eleve']);
-    $montant = htmlspecialchars($_POST['montant']);
-    
-    
-    $check_query = " SELECT * FROM payement
-    WHERE id_eleve=:id_eleve
-   ";
-  $statement = $db->prepare($check_query);
-  $check_data = array(
-     ':id_eleve' =>  $id_eleve    
-  );
-  if($statement->execute($check_data))  
- {
-    if($statement->rowCount() > 0)
-     {
-        echo "<script>
-                 Swal.fire({
-                  icon: 'error',
-                   title: 'Oops...',
-              text: 'Cet payement existe deja!',
-                 footer: ''
-                  })
-          </script>";
-     }
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Connexion eleve</h1>
 
-  else
-  {
-    if ($statement->rowCount() == 0 ) {
-        $rre=$db->prepare("INSERT INTO payement (id_eleve,montant) VALUES (:id_eleve,:montant)");
-
-        $resul=$rre->execute(array(
-            'id_eleve' => $id_eleve,
-            'montant' => $montant
-                       
-        ));
-        if ($resul) {
-            echo "<script>
-                Swal.fire({
-                     position: 'top-end',
-                     icon: 'success',
-                     title: 'Eleve inserer avec success',
-                    showConfirmButton: false,
-                     timer: 1500
-                   })
-
-            </script>";
-        }else{
-             echo "<script>
-                     Swal.fire({
-                      icon: 'error',
-                       title: 'Oops...',
-                  text: 'eleve non inserer!',
-                     footer: ''
-                      })
-              </script>";
-
-        }
-        }
-    }
-}
-}
-     
-   
-
-    
-
-?>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-               <?php include 'part/_side.php' ?>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Liste des eleves inscripts</h1>
-                    
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Inscription</h6>
-                           
-                        <div class="col" align="right">
-                          <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i></button>
+                                        <?php
+      if(isset($error)){
+         foreach($error as $error){
+            echo '<span class="error-msg">'.$error.'</span>';
+         };
+      };
+      ?>
+                                    </div>
+                                    <form method="POST" action="">
+                                        <div class="form-group">
+                                            <input type="mail" name="email" class="form-control form-control-user"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="mail">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" name="password" class="form-control form-control-user"
+                                                id="exampleInputPassword" placeholder="Mot de passe">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">Remember
+                                                    Me</label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" name="submit" class="btn btn-primary btn-user btn-block">
+                                            Se connecter
+                                        </button>
+                                        
+                                      
+                                    </form>
+                                   
                                     
                                 </div>
-                        </div>
-                        
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            
-                                            <th>Nom de l'eleve</th>
-                                           
-                                            <th>Montant</th>
-                                            <th>Date payement</th>
-                                            <th>Action</th>
-
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                    <tr>
-                                            
-                                            <th>Nom de l'eleve</th>
-                                           
-                                            <th>Montant</th>
-                                            <th>Date payement</th>
-                                            <th>Action</th>
-
-                                            
-                                        </tr>
-                                       
-                                    </tfoot>
-                                    <tbody>
-                                    <?php $requete=$db->query("SELECT * FROM payement INNER JOIN eleves ON payement.id_eleve=eleves.id_eleves"); ?>
-                                    <?php while ($g = $requete->fetch()) {
-                                        
-                                        
-
-                                        
-                                        ?>
-                                        <tr>
-                                            
-                                            
-                                            <td><?= $g['nom_complet']; ?></td>
-                                            
-                                            <td><?= $g['montant']; ?> $</td>
-                                            <td><?= $g['created_p']; ?></td>
-                                            <td>
-                                            <button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-pen"></i></button>
-                                            </td>
-                                            
-                                        </tr>
-                                        <?php } ?>
-                                       
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <!-- /.container-fluid -->
 
             </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <?php include 'part/_footer.php' ?>
-            <!-- End of Footer -->
 
         </div>
-        <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-   <?php include 'part/_log.php' ?>
-
-
-   <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Nouvelle inscription</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
-                        
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="POST">
-                          
-                          <div class="row">
-                          <div class="col-md-6">
-                          <?php $reque=$db->query("SELECT * FROM eleves ORDER BY nom_complet ASC"); ?>
-                               <select class="form-control" name="id_eleve" id="">
-                               
-                               <option value="">--Eleves--</option>
-                                    <?php while ($gg = $reque->fetch()) { ?>
-                                <option value="<?= $gg['id_eleves'];?>"><?= $gg['nom_complet'];?> </option>
-                                <?php } ?>
-                               </select>
-                              </div>
-                              <div class="col-md-6">
-                              <input class="form-control" type="number" name="montant">
-                           </div>
-                          </div>
-                          <br>
-                          
-                          
-                           
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                        <button type="submit" name="submit" class="btn btn-primary">Enregistrer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -266,13 +145,6 @@ if (isset($_POST['submit'])) {
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
 
 </body>
 

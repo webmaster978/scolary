@@ -1,4 +1,4 @@
-<?php require "../config/database.php" ?>
+<?php require "../config/data.php" ?>
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -41,8 +41,8 @@
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Informations personnel:</h6>
-            <a class="collapse-item" href="annee">Mon profil</a>
-            <a class="collapse-item" href="option">Mon dossier</a>
+            <a class="collapse-item" href="profile">Mon profil</a>
+            <a class="collapse-item" href="">Mon dossier</a>
             
             
         </div>
