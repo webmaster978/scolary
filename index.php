@@ -146,6 +146,8 @@ if(isset($_POST['btn_sub'])) {
                                       
                                     </form>
                                     <hr>
+                                    <a href="authentification" class="btn btn-primary btn-user btn-block">Se connecter en tant que eleve</a>
+                                   
                                     
                                 </div>
                             </div>

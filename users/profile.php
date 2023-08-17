@@ -53,33 +53,38 @@
 
                     <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                               <input class="form-control disabled" type="text">
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Earnings (Annual)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
+                   <div class="col-md-6">
+                   <label for="">Nom complet</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   </div>
+                   <div class="col-md-6">
+                   <label for="">Nom complet</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   </div>
+                        
+                    </div>
+                    <br>
+                    <div class="row">
+                   <div class="col-md-6">
+                   <label for="">Nom complet</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   </div>
+                   <div class="col-md-6">
+                   <label for="">Nom complet</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   </div>
+                        
+                    </div>
+                    <br>
+                    <div class="row">
+                   <div class="col-md-6">
+                   <label for="">Nom complet</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   </div>
+                   <div class="col-md-6">
+                   <label for="">Nom complet</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   </div>
                         
                     </div>
 

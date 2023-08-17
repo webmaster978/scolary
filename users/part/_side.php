@@ -1,17 +1,18 @@
-<?php	
- //require 'config/database.php';
- if (!isset($_SESSION['PROFILE']['id_utilisateur']) || $_SESSION['PROFILE']['designation'] != 'utilisateur') {
-	header('location:../');
- }
- else {
-	$recup_informations = $db->prepare("SELECT * FROM fonction INNER JOIN tbl_agent ON fonction.id_fonction=tbl_agent.ref_fonction WHERE id_utilisateur=:id_utilisateur");
-	$recup_informations->execute([
-		'id_utilisateur' => $_SESSION['PROFILE']['id_utilisateur']
-	]);
-	$user_infos = $recup_informations->fetch(PDO::FETCH_OBJ);
- }
+<?php
+
+@include '../config/data.php';
+
+session_start();
+
+if(!isset($_SESSION['user_name'])){
+   header('location:authentification.php');
+}
 
 ?>
+
+
+
+
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
