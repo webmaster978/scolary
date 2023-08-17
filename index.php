@@ -35,6 +35,9 @@ if(isset($_SESSION['PROFILE']['id_utilisateur'])) {
         case 'admin':
             header('location: dashboard');
         break;
+        case 'utilisateur':
+            header('location: users/');
+             break;
         
         
         default:
@@ -73,6 +76,9 @@ if(isset($_POST['btn_sub'])) {
              case 'admin':
             header('location: dashboard');
              break;
+             case 'utilisateur':
+                header('location: users/');
+                 break;
              
             default:
                 header('location: ./');

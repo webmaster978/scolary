@@ -1,0 +1,10 @@
+RewriteEngine on
+RewriteRule ^login$ index.php
+RewriteRule ^dashboard$ dashboard.php
+RewriteRule ^annee$ annee.php
+RewriteRule ^classes$ classe.php
+RewriteRule ^option$ option.php
+RewriteRule ^eleves$ eleves.php
+RewriteRule ^inscriptions$ inscriptions.php
+RewriteRule ^dossiers$ dossiers.php
+RewriteRule ^payements$ payements.php

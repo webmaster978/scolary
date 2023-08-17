@@ -1,4 +1,4 @@
-<?php require "config/database.php" ?>
+<?php require "../config/database.php" ?>
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -20,44 +20,11 @@
         <span>Dashboard</span></a>
 </li>
 
-<!-- Divider -->
-<hr class="sidebar-divider">
-<li class="nav-item">
-    <a class="nav-link" href="eleves">
-        <i class="fas fa-fw fa-users"></i>
-        <span>Eleves</span></a>
-</li>
-
-<!-- Divider -->
-<hr class="sidebar-divider">
-<li class="nav-item">
-    <a class="nav-link" href="payements">
-        <i class="fas fa-money-check-alt"></i>
-        <span>Payement</span></a>
-</li>
-<hr class="sidebar-divider">
-<li class="nav-item">
-    <a class="nav-link" href="inscriptions">
-        <i class="fas fa-fw fa-pen"></i>
-        <span>Inscription</span></a>
-</li>
 
 <!-- Divider -->
 <hr class="sidebar-divider">
 
-<li class="nav-item">
-    <a class="nav-link" href="dossiers">
-        <i class="fas fa-fw fa-book"></i>
-        <span>Dossiers</span></a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="users/">
-        <i class="fas fa-fw fa-book"></i>
-        <span>Authentification</span></a>
-</li>
 
-<!-- Divider -->
-<hr class="sidebar-divider">
 
 <!-- Heading -->
 <div class="sidebar-heading">
@@ -69,14 +36,14 @@
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
         aria-expanded="true" aria-controls="collapseTwo">
         <i class="fas fa-fw fa-cog"></i>
-        <span>Configuration</span>
+        <span>Mes données</span>
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Configuration de base:</h6>
-            <a class="collapse-item" href="annee">Annee scolaire</a>
-            <a class="collapse-item" href="option">Option</a>
-            <a class="collapse-item" href="classes">Classe</a>
+            <h6 class="collapse-header">Informations personnel:</h6>
+            <a class="collapse-item" href="annee">Mon profil</a>
+            <a class="collapse-item" href="option">Mon dossier</a>
+            
             
         </div>
     </div>
