@@ -58,35 +58,67 @@
                  <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
                    </div>
                    <div class="col-md-6">
-                   <label for="">Nom complet</label>
-                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   <label for="">Genre</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_sexe'] ?>" disabled>
                    </div>
                         
                     </div>
-                    <br>
+                    
                     <div class="row">
                    <div class="col-md-6">
-                   <label for="">Nom complet</label>
-                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   <label for="">Date de naissance</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_date_naiss'] ?>" disabled>
                    </div>
                    <div class="col-md-6">
-                   <label for="">Nom complet</label>
-                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   <label for="">Lieu de naissance</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_lieu_naiss'] ?>" disabled>
                    </div>
                         
                     </div>
-                    <br>
+                    
                     <div class="row">
                    <div class="col-md-6">
-                   <label for="">Nom complet</label>
-                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   <label for="">Responsable</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_responsable'] ?>" disabled>
                    </div>
                    <div class="col-md-6">
-                   <label for="">Nom complet</label>
-                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_name'] ?>" disabled>
+                   <label for="">Contact responsable</label>
+                 <input class="form-control" type="text" value="<?php echo $_SESSION['user_contact'] ?>" disabled>
                    </div>
                         
                     </div>
+                    <!-- <?php 
+                        $service = $db->query('SELECT * FROM inscription INNER JOIN eleves ON inscription.ref_eleve=eleves.id_eleves INNER JOIN annee ON inscription.ref_annee=annee.id_annee INNER JOIN classe ON inscription.ref_classe=classe.id_classe INNER JOIN options ON inscription.ref_option=options.id_option WHERE ref_eleve=:ref_eleve');
+$service->execute(array(
+  'ref_eleve' => $_SESSION['id_user']
+));
+
+$don = $service->fetchAll(PDO::FETCH_OBJ);
+foreach ($don as $s) :
+       
+                                        $ss= $g['nom_classe'];
+                                        $te = "";
+                                        if($ss == '1'){ 
+                                           $te="<span>ere</span>";
+                                        } else {
+                                            $te="<span>eme</span>";
+                                        }
+ 
+    ?> -->
+
+                    <h3>Scolaire</h3>
+                    <!-- <?php echo $_SESSION['id_user'] ?> -->
+                  
+                                     
+
+                                        
+                                        
+
+                                      
+
+
+
+<!-- <?php endforeach ?> -->
 
                     <!-- Content Row -->
 
