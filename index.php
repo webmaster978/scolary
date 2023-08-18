@@ -106,7 +106,12 @@ if(isset($_POST['btn_sub'])) {
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block"></div>
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <br>
+                                <br>
+                                <br>
+                            <img width="505px;" src="img/instigo.jpeg" alt="">
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">

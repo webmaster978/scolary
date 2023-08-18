@@ -35,6 +35,7 @@ if(isset($_POST['submit'])){
          $_SESSION['user_date_naiss'] = $row['date_naiss'];
          $_SESSION['user_responsable'] = $row['responsable'];
          $_SESSION['user_contact'] = $row['contact'];
+         $_SESSION['user_lieu_naiss'] = $row['date_naiss'];
          $_SESSION['adresse'] = $row['adresse'];
          $_SESSION['user_photo'] = $row['photo'];
          header('location:users/');
@@ -85,7 +86,9 @@ if(isset($_POST['submit'])){
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block"></div>
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <img width="505px;" src="img/instigo.jpeg" alt="">
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
