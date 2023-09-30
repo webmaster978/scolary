@@ -8,3 +8,4 @@ RewriteRule ^eleves$ eleves.php
 RewriteRule ^inscriptions$ inscriptions.php
 RewriteRule ^dossiers$ dossiers.php
 RewriteRule ^payements$ payements.php
+RewriteRule ^authentification$ authentification.php
