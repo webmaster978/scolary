@@ -38,16 +38,16 @@
 
 if (isset($_POST['submit'])) {
     extract($_POST);
-    $id_eleve = htmlspecialchars($_POST['id_eleve']);
+    $id_classe = htmlspecialchars($_POST['id_classe']);
     $montant = htmlspecialchars($_POST['montant']);
     
     
     $check_query = " SELECT * FROM payement
-    WHERE id_eleve=:id_eleve
+    WHERE id_classe=:id_classe
    ";
   $statement = $db->prepare($check_query);
   $check_data = array(
-     ':id_eleve' =>  $id_eleve    
+     ':id_classe' =>  $id_classe    
   );
   if($statement->execute($check_data))  
  {
@@ -66,10 +66,10 @@ if (isset($_POST['submit'])) {
   else
   {
     if ($statement->rowCount() == 0 ) {
-        $rre=$db->prepare("INSERT INTO payement (id_eleve,montant) VALUES (:id_eleve,:montant)");
+        $rre=$db->prepare("INSERT INTO payement (id_classe,montant) VALUES (:id_classe,:montant)");
 
         $resul=$rre->execute(array(
-            'id_eleve' => $id_eleve,
+            'id_classe' => $id_classe,
             'montant' => $montant
                        
         ));
@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Liste des eleves inscripts</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Liste des frais d'inscription</h1>
                     
 
                     <!-- DataTales Example -->
@@ -141,7 +141,7 @@ if (isset($_POST['submit'])) {
                                     <thead>
                                         <tr>
                                             
-                                            <th>Nom de l'eleve</th>
+                                            <th>Niveau de la classe</th>
                                            
                                             <th>Montant</th>
                                             <th>Date payement</th>
@@ -153,9 +153,9 @@ if (isset($_POST['submit'])) {
                                     <tfoot>
                                     <tr>
                                             
-                                            <th>Nom de l'eleve</th>
+                                            <th>Niveau de la classe</th>
                                            
-                                            <th>Montant</th>
+                                            <th>Montant d'inscription</th>
                                             <th>Date payement</th>
                                             <th>Action</th>
 
@@ -164,7 +164,7 @@ if (isset($_POST['submit'])) {
                                        
                                     </tfoot>
                                     <tbody>
-                                    <?php $requete=$db->query("SELECT * FROM payement INNER JOIN eleves ON payement.id_eleve=eleves.id_eleves"); ?>
+                                    <?php $requete=$db->query("SELECT * FROM payement INNER JOIN classe ON payement.id_classe=classe.id_classe"); ?>
                                     <?php while ($g = $requete->fetch()) {
                                         
                                         
@@ -174,7 +174,7 @@ if (isset($_POST['submit'])) {
                                         <tr>
                                             
                                             
-                                            <td><?= $g['nom_complet']; ?></td>
+                                            <td><?= $g['nom_classe']; ?></td>
                                             
                                             <td><?= $g['montant']; ?> $</td>
                                             <td><?= $g['created_p']; ?></td>
@@ -220,7 +220,7 @@ if (isset($_POST['submit'])) {
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Nouvelle inscription</h5>
+                    <h5 class="modal-title" id="myModalLabel">Configuration des frais</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
                         
                     </div>
@@ -229,12 +229,12 @@ if (isset($_POST['submit'])) {
                           
                           <div class="row">
                           <div class="col-md-6">
-                          <?php $reque=$db->query("SELECT * FROM eleves ORDER BY nom_complet ASC"); ?>
-                               <select class="form-control" name="id_eleve" id="">
+                          <?php $reque=$db->query("SELECT * FROM classe"); ?>
+                               <select class="form-control" name="id_classe" id="">
                                
-                               <option value="">--Eleves--</option>
+                               <option value="">--Classe--</option>
                                     <?php while ($gg = $reque->fetch()) { ?>
-                                <option value="<?= $gg['id_eleves'];?>"><?= $gg['nom_complet'];?> </option>
+                                <option value="<?= $gg['id_classe'];?>"><?= $gg['nom_classe'];?> eme </option>
                                 <?php } ?>
                                </select>
                               </div>

@@ -22,6 +22,14 @@
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="files/bower_components/select2/dist/css/select2.min.css" />
+    
+
+
+<link rel="stylesheet" type="text/css" href="files/bower_components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" />
+<link rel="stylesheet" type="text/css" href="files/bower_components/multiselect/css/multi-select.css" />
+
+
 
 </head>
 
@@ -43,7 +51,7 @@ if (isset($_POST['submit'])) {
     $ref_eleve = htmlspecialchars($_POST['ref_eleve']);
     $ref_option = htmlspecialchars($_POST['ref_option']);
     
-    $check_query = " SELECT * FROM inscription 
+    $check_query = "SELECT * FROM inscription 
     WHERE ref_eleve=:ref_eleve
    ";
   $statement = $db->prepare($check_query);
@@ -233,14 +241,22 @@ if (isset($_POST['submit'])) {
                           
                           <div class="row">
                           <div class="col-md-6">
+
+                         
+
+
                           <?php $reque=$db->query("SELECT * FROM eleves ORDER BY nom_complet ASC"); ?>
-                               <select class="form-control" name="ref_eleve" id="">
-                               
-                               <option value="">--Eleves--</option>
-                                    <?php while ($gg = $reque->fetch()) { ?>
+
+                          <select class="js-example-disabled-results" name="ref_eleve">
+                          <?php while ($gg = $reque->fetch()) { ?>
                                 <option value="<?= $gg['id_eleves'];?>"><?= $gg['nom_complet'];?> </option>
                                 <?php } ?>
-                               </select>
+
+                           </select>
+
+
+
+                               
                               </div>
                               <div class="col-md-6">
                               <?php $reqa=$db->query("SELECT * FROM annee"); ?>
@@ -305,6 +321,22 @@ if (isset($_POST['submit'])) {
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+    <script type="text/javascript" src="files/assets/pages/advance-elements/select2-custom.js"></script>
+   
+
+
+    <script type="text/javascript" src="files/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<script type="text/javascript" src="files/bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js">
+
+
+            </script>
+<script type="text/javascript" src="files/bower_components/multiselect/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="files/assets/js/jquery.quicksearch.js"></script>
+
+
+
+
 
 </body>
 

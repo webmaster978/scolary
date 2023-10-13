@@ -28,19 +28,14 @@
         <span>Eleves</span></a>
 </li>
 
-<!-- Divider -->
-<hr class="sidebar-divider">
 <li class="nav-item">
     <a class="nav-link" href="payements">
-        <i class="fas fa-money-check-alt"></i>
-        <span>Payement</span></a>
+        <i class="fas fa-dollar-sign fa-dollar"></i>
+        <span>Config frais</span></a>
 </li>
-<hr class="sidebar-divider">
-<li class="nav-item">
-    <a class="nav-link" href="inscriptions">
-        <i class="fas fa-fw fa-pen"></i>
-        <span>Inscription</span></a>
-</li>
+
+<!-- Divider -->
+
 
 <!-- Divider -->
 <hr class="sidebar-divider">
