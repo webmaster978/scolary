@@ -216,11 +216,13 @@ if (isset($_POST['submit'])) {
                         
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="docs.php" method="POST" enctype="multipart/form-data">
                           
                           <div class="row">
                           <div class="col-md-6">
                           <?php $reque=$db->query("SELECT * FROM inscription INNER JOIN eleves ON inscription.ref_eleve=eleves.id_eleves"); ?>
+
+
                                <select class="form-control" name="ref_inscription" id="">
                                
                                <option value="">--Eleves--</option>

@@ -44,6 +44,11 @@ if (isset($_POST['submit'])) {
     $responsable = htmlspecialchars($_POST['responsable']);
     $contact = htmlspecialchars($_POST['contact']);
     $adresse = htmlspecialchars($_POST['adresse']);
+    $ref_annee = htmlspecialchars($_POST['ref_annee']);
+    $ref_classe = htmlspecialchars($_POST['ref_classe']);
+    $montant = htmlspecialchars($_POST['montant']);
+    $ref_option = htmlspecialchars($_POST['ref_option']);
+    
     $fileName = $_FILES['file']['name'];
      $fileTmpName = $_FILES['file']['tmp_name'];
        
@@ -81,7 +86,7 @@ if (isset($_POST['submit'])) {
   
  
 
-  $req=$db->prepare("INSERT INTO eleves (nom_complet,sexe,lieu_naiss,date_naiss,responsable,contact,photo,adresse) VALUES (:nom_complet,:sexe,:lieu_naiss,:date_naiss,:responsable,:contact,:photo,:adresse)");
+  $req=$db->prepare("INSERT INTO eleves (nom_complet,sexe,lieu_naiss,date_naiss,responsable,contact,photo,adresse,ref_annee,ref_classe,montant,ref_option) VALUES (:nom_complet,:sexe,:lieu_naiss,:date_naiss,:responsable,:contact,:photo,:adresse,:ref_annee,:ref_classe,:montant,:ref_option)");
 
   $res=$req->execute(array(
     'nom_complet' => $nom_complet,
@@ -91,7 +96,11 @@ if (isset($_POST['submit'])) {
     'responsable' => $responsable,
 	'adresse' => $adresse,
     'photo' => $fileName,
-    'contact' => $contact
+    'contact' => $contact,
+    'ref_annee' => $ref_annee,
+    'ref_classe' => $ref_classe,
+    'montant' => $montant,
+    'ref_option' => $ref_option
     
     
   ));
@@ -298,15 +307,67 @@ if (isset($_POST['submit'])) {
                           <br>
                           <div class="row">
                             
-                              <div class="col-md-12">
-                                <label for="">Adresse</label>
-                                <textarea class="form-control" name="adresse" id="" cols="30" rows="5">
-
-                                </textarea>
-                            
+                          <div class="col-md-6">
+                          <?php $reque=$db->query("SELECT * FROM payement"); ?>
+                               <select class="form-control" name="montant" id="">
                                
+                               <option value="">--montant inscription--</option>
+                                    <?php while ($gg = $reque->fetch()) {
+                                         $ss= $gg['id_classe'];
+                                         $te = "";
+                                         if($ss == '1'){ 
+                                            $te="<span>ere</span>";
+                                         } else {
+                                             $te="<span>eme</span>";
+                                         }
+                                        
+                                        ?>
+                                <option value="<?= $gg['montant'];?>"><?= $gg['id_classe'];?> <?php echo $te; ?> - <?= $gg['montant'];?> $</option>
+                                <?php } ?>
+                               </select>
                               </div>
+                              <div class="col-md-6">
+                              <?php $reqo=$db->query("SELECT * FROM options"); ?>
+                              <select class="form-control" name="ref_option" id="">
+                               
+                               <option>--Options--</option>
+                                    <?php while ($go = $reqo->fetch()) { ?>
+                                <option value="<?= $go['id_option'];?>"><?= $go['nom_option'];?></option>
+                                <?php } ?>
+                               </select>
+                           </div>
+                              
+                          <br>
+                          <br>
+                          <div class="col-md-6">
+                              <?php $reqa=$db->query("SELECT * FROM annee"); ?>
+                              <select class="form-control" name="ref_annee" id="">
+                               
+                               <option value="">--Annee scolaire--</option>
+                                    <?php while ($ga = $reqa->fetch()) { ?>
+                                <option value="<?= $ga['id_annee'];?>"><?= $ga['anne'];?></option>
+                                <?php } ?>
+                               </select>
+                           </div>
+
+                           <div class="col-md-6">
+                          <?php $reqcl=$db->query("SELECT * FROM classe"); ?>
+                          <select class="form-control" name="ref_classe" id="">
+                               
+                               <option>--Classe--</option>
+                                    <?php while ($gl = $reqcl->fetch()) { ?>
+                                <option value="<?= $gl['id_classe'];?>"><?= $gl['nom_classe'];?></option>
+                                <?php } ?>
+                               </select>
+                              </div>
+                              <br>
+                              <br>
+                              <div class="col-md -12">
+                          <input class="form-control" name="adresse" type="text" placeholder="Adresse">
                           </div>
+                            
+                          </div>
+                         
                           
                           
                           
