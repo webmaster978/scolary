@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -135,6 +136,12 @@ if (isset($_POST['submit'])) {
 
 
  ?>
+
+
+
+
+
+
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -144,7 +151,7 @@ if (isset($_POST['submit'])) {
             <div id="content">
 
                 <!-- Topbar -->
-               <?php include 'part/_side.php' ?>
+               <?php include 'part/_side.php'; ?>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -200,6 +207,52 @@ if (isset($_POST['submit'])) {
                                     <tbody>
                                     <?php $requete=$db->query("SELECT * FROM eleves"); ?>
                                     <?php while ($g = $requete->fetch()) { ?>
+
+                                           <!-- <h1>Modal fichier</h1> -->
+
+                                           <div class="modal fade bs-example<?= $g['id_eleves']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Ajouter un dossier</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <form action="docs.php" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="id_eleves" value="<?= $g['id_eleves'];?>">
+                          
+                          <div class="row">
+                            <div class="col-md-6">                            
+                               <input class="form-control" name="nom_complet" type="text" value="<?= $g['nom_complet']; ?>" disabled>
+                              </div>
+                              <div class="col-md-6">
+                                <input class="form-control" type="file" name="myfile">
+                              </div>
+                        </div>
+                          <br>
+                     
+                   
+                       
+                         
+                          
+                          
+                          
+                          
+                           
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="save" class="btn btn-primary">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                                           <!-- <h1>Fin modal fichier</h1> -->
+
                                         <tr>
                                             
                                             <td><?= $g['id_eleves']; ?></td>
@@ -215,7 +268,8 @@ if (isset($_POST['submit'])) {
                                             <td>
                                             <button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-pen"></i></button>
                                             <button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-trash"></i></button>
-                                            <button type="button" class="btn btn-primary btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-image"></i></button>
+                                            <button type="button" class="btn btn-primary btn-circle btn-sm" data-toggle="modal" data-target=".bs-example<?= $g['id_eleves']; ?>"><i class="fa fa-file"></i></button>
+                                            <a class="btn btn-success btn-circle btn-sm" href="pcard.php?idp=<?= $g['id_eleves']; ?>"> <i class="fa fa-print"></i> </a>
 
                                             </td>
                                             
