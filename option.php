@@ -110,6 +110,48 @@ if (isset($_POST['submit'])) {
     
 
 ?>
+
+
+
+
+
+<?php
+if(isset($_POST['sub'])){
+    extract($_POST);
+
+    $id_option = htmlspecialchars($_POST['id_option']);
+    $nom_option = htmlspecialchars($_POST['nom_option']);
+
+    $modif = $db->prepare("UPDATE options SET nom_option=:nom_option WHERE id_option=:id_option");
+
+    $md=$modif->execute(array(
+        'id_option' => $id_option,
+        'nom_option' => $nom_option
+    ));
+
+}
+
+
+?>
+
+<?php
+if(isset($_POST['su'])){
+    extract($_POST);
+
+    $id_option = htmlspecialchars($_POST['id_option']);
+   
+
+    $supp = $db->prepare("DELETE FROM options WHERE id_option=:id_option");
+
+    $supp->execute(array(
+        'id_option' => $id_option
+        
+    ));
+
+}
+
+
+?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -149,6 +191,7 @@ if (isset($_POST['submit'])) {
                                             <th>Num option</th>
                                             <th>Option</th>
                                             <th>Date creation</th>
+                                            <th>Action</th>
                                             
                                         </tr>
                                     </thead>
@@ -158,16 +201,98 @@ if (isset($_POST['submit'])) {
                                         <th>Num option</th>
                                             <th>Option</th>
                                             <th>Date creation</th>
+                                            <th>Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
                                     <?php $requete=$db->query("SELECT * FROM options"); ?>
                                     <?php while ($g = $requete->fetch()) { ?>
+                                        
+
+                                        <div class="modal fade bs-example-modal-lg<?= $g['id_option']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modifier l'option <?= $g['nom_option']; ?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                          
+                          <div class="row">
+                          <div class="col-md-12">
+                            <input type="hidden" name="id_option" value="<?= $g['id_option']; ?>">
+                            
+                               <input class="form-control" name="nom_option" type="text" value="<?= $g['nom_option']; ?>" placeholder="Nouvelle option">
+                              </div>
+                              <br>
+                            
+                              
+
+                          </div>
+                          
+                           
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="sub" class="btn btn-warning">Modifier</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade bs-example-modal<?= $g['id_option']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Suppression de <?= $g['nom_option']; ?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                          
+                          <div class="row">
+                          <div class="col-md-12">
+                            <input type="hidden" name="id_option" value="<?= $g['id_option']; ?>">
+                            
+                              Etes vos sur de vouloir supprimer l'option  <?= $g['nom_option']; ?> ???
+                              </div>
+                              <br>
+                            
+                              
+
+                          </div>
+                          
+                           
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="su" class="btn btn-warning">Modifier</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
                                         <tr>
                                             
                                             <td><?= $g['id_option']; ?></td>
                                             <td><?= $g['nom_option']; ?></td>
                                             <td><?= $g['created_option']; ?></td>
+                                            <td>
+                                            <button type="button" class="btn btn-warning btn-circle" data-toggle="modal" data-target=".bs-example-modal-lg<?= $g['id_option']; ?>"><i class="fa fa-pen"></i></button>
+                                            <button type="button" class="btn btn-danger btn-circle" data-toggle="modal" data-target=".bs-example-modal<?= $g['id_option']; ?>"><i class="fa fa-trash"></i></button>
+                                                
+                                            </td>
                                             
                                         </tr>
                                         <?php } ?>

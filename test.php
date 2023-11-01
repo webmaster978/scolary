@@ -1,5 +1,5 @@
 
-<?php include'config/base.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,22 +105,6 @@ margin-top:20px;
 </head>
 <body onload="window.print(); window.close();">
 
-<?php
-
-    
-    $idp = $_GET['idp'];
-    // $req = $db->prepare('');
-    // $req->execute(array($id_card));
-
-
-    $card = $db->prepare("SELECT * FROM eleves inner join classe on ref_classe = classe.id_classe inner join annee on ref_annee = annee.id_annee inner join options on ref_option=options.id_option WHERE id_eleves=:idp");
-	$card->execute([
-		'idp' => $idp
-	]);
-	$carte = $card->fetch(PDO::FETCH_OBJ);
-
-
-    ?>
 
 
 
@@ -131,14 +115,14 @@ margin-top:20px;
 <div class="receipt-header">
 <div class="col-xs-6 col-sm-6 col-md-6">
 <div class="receipt-left">
-<img class="img-responsive" alt="iamgurdeeposahan" src="prof/<?=ucwords($carte->photo); ?>" style="width: 71px; border-radius: 43px;">
+<img class="img-responsive" alt="iamgurdeeposahan" src="img/avatar.png" style="width: 71px; border-radius: 43px;">
 </div>
 </div>
 <div class="col-xs-6 col-sm-6 col-md-6 text-right">
 <div class="receipt-right">
-<h5>INSTIGO</h5>
+<h5>INSTITUT INJILI</h5>
 <p>BP 376 GOMA<i class="fa fa-phone"></i></p>
-<p><a href="#" class="#" data-cfemail="#">instigo@gmail.com</a> <i class="fa fa-envelope-o"></i></p>
+<p><a href="#" class="#" data-cfemail="#">injili@gmail.com</a> <i class="fa fa-envelope-o"></i></p>
 <p>Goma <i class="fa fa-location-arrow"></i></p>
 </div>
 </div>
@@ -148,15 +132,15 @@ margin-top:20px;
 <div class="receipt-header receipt-header-mid">
 <div class="col-xs-8 col-sm-8 col-md-8 text-left">
 <div class="receipt-right">
-<h5> <?=ucwords($carte->nom_complet); ?></h5>
-<p><b>Annee scolaire :</b> <?=ucwords($carte->anne); ?></p>
-<p><b>Classe :</b> <a href="#"><?=$carte->nom_classe; ?> <?=$carte->nom_option; ?></a></p>
+<h5> Jeremie</h5>
+<p><b>Annee scolaire :</b> 2021-2022</p>
+<p><b>Classe :</b> <a href="#">2 eme Commerciale</a></p>
 
 </div>
 </div>
 <div class="col-xs-4 col-sm-4 col-md-4">
 <div class="receipt-left">
-<h3> Recu numero <?=$carte->id_eleves; ?> </h3>
+<h3> Recu numero 4 </h3>
 </div>
 </div>
 </div>
@@ -172,7 +156,7 @@ margin-top:20px;
 <tbody>
 <tr>
 <td class="col-md-9">Frais d'inscription</td>
-<td class="col-md-3"><i class="fa fa-inr"></i> <?=$carte->montant; ?> $</td>
+<td class="col-md-3"><i class="fa fa-inr"></i> 5 $</td>
 </tr>
 
 <tr>
@@ -187,7 +171,7 @@ margin-top:20px;
 </td>
 <td>
 <p>
-<strong><i class="fa fa-inr"></i><?=$carte->montant; ?> $</strong>
+<strong><i class="fa fa-inr"></i>5 $</strong>
 </p>
 <p>
 <strong><i class="fa fa-inr"></i>0 $</strong>
@@ -197,7 +181,7 @@ margin-top:20px;
 </tr>
 <tr>
 <td class="text-right"><h2><strong>Total: </strong></h2></td>
-<td class="text-left text-danger"><h2><strong><i class="fa fa-inr"></i> <?=$carte->montant; ?> $</strong></h2></td>
+<td class="text-left text-danger"><h2><strong><i class="fa fa-inr"></i> 5 $</strong></h2></td>
 </tr>
 </tbody>
 </table>
@@ -206,8 +190,8 @@ margin-top:20px;
 <div class="receipt-header receipt-header-mid receipt-footer">
 <div class="col-xs-8 col-sm-8 col-md-8 text-left">
 <div class="receipt-right">
-<p><b>Date :</b> <?=$carte->created_eleve; ?></p>
-<h5 style="color: rgb(140, 140, 140);">INSTIGO!</h5>
+<p><b>Date :</b> 2023-10-15 15:18:57</p>
+<h5 style="color: rgb(140, 140, 140);">INSTITUT INJILI!</h5>
 </div>
 </div>
 <div class="col-xs-4 col-sm-4 col-md-4">
