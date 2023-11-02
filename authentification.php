@@ -38,6 +38,7 @@ if(isset($_POST['submit'])){
          $_SESSION['user_lieu_naiss'] = $row['date_naiss'];
          $_SESSION['adresse'] = $row['adresse'];
          $_SESSION['user_photo'] = $row['photo'];
+         $_SESSION['user_docs'] = $row['filename'];
          header('location:users/');
 
       }

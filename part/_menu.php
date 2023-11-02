@@ -34,11 +34,17 @@
         <span>Config frais</span></a>
 </li>
 
+<li class="nav-item">
+    <a class="nav-link" href="dossiers">
+        <i class="fas fa-dollar-sign fa-file"></i>
+        <span>Documents</span></a>
+</li>
+
 <!-- Divider -->
 
 
 <!-- Divider -->
-<hr class="sidebar-divider">
+
 
 
 
