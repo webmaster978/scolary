@@ -34,89 +34,7 @@
        <?php include 'part/_menu.php' ?>
 
 
-       <?php 
-if (isset($_POST['submit'])) {
-    extract($_POST);
-    $ref_inscription = htmlspecialchars($_POST['ref_inscription']);
-	
-    $fileName = $_FILES['file']['name'];
-     $fileTmpName = $_FILES['file']['tmp_name'];
-       
-       $path = "docs/".$fileName;
 
-            $check_query = "SELECT * FROM dossiers 
-            WHERE ref_inscription=:ref_inscription
-           ";
-          $statement = $db->prepare($check_query);
-          $check_data = array(
-           
-             ':ref_inscription'   =>  $ref_inscription            
-          );
-           if($statement->execute($check_data))  
-         {
-            if($statement->rowCount() > 1)
-             {
-                echo "
-                <script>
-                         Swal.fire({
-                          icon: 'error',
-                           title: 'Oops...',
-                      text: 'Cet dossier existe deja!',
-                         footer: ''
-                          })
-                  </script>
-                ";             
-            }
-        
-          else
-            {
-            if ($statement->rowCount() == 0 ) {
-
-				
-  
- 
-
-  $req=$db->prepare("INSERT INTO dossiers (filename,ref_inscription,ref_agent) VALUES (:filename,:ref_inscription,:ref_agent)");
-
-  $res=$req->execute(array(
-    'ref_inscription' => $ref_inscription,    
-    'filename' => $fileName,
-    'ref_agent' => $_SESSION['PROFILE']['id_utilisateur']
-    
-    
-    
-  ));
-  if ($res) {
-	move_uploaded_file($fileTmpName,$path);
-     echo "
-     <script>
-     Swal.fire({
-      position: 'top-end',
-      icon: 'success',
-      title: 'Apelle d'offre envoyer avec success',
-      showConfirmButton: false,
-      timer: 1500
-    })
-     </script>
-     ";
-  }else{
-      echo "<script>
-                         Swal.fire({
-                          icon: 'error',
-                           title: 'Oops...',
-                      text: 'Apelle non envoyer!',
-                         footer: ''
-                          })
-                  </script>";
-  }
-  }
-  }
-  }
-}
-
-
-
- ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -141,10 +59,7 @@ if (isset($_POST['submit'])) {
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Dossiers</h6>
                            
-                        <div class="col" align="right">
-                          <button type="button" class="btn btn-success btn-circle" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i></button>
-                                    
-                                </div>
+                       
                         </div>
                         
                         <div class="card-body">
@@ -154,24 +69,24 @@ if (isset($_POST['submit'])) {
                                         <tr>
                                             
                                             <th>Nom de l'eleve</th>
-                                            <th>Date Dossier</th>
+                                            <th>Dossier</th>
                                             
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                         
-                                            <th>Annee scolaire</th>
+                                            <th>Nom de l'eleve</th>
                                             <th>Date creation</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                    <?php $requete=$db->query("SELECT * FROM dossiers INNER JOIN eleves ON dossiers.ref_inscription=eleves.id_eleves"); ?>
+                                    <?php $requete=$db->query("SELECT * FROM eleves"); ?>
                                     <?php while ($g = $requete->fetch()) { ?>
                                         <tr>
                                             
                                             <td><?= $g['nom_complet']; ?></td>
-                                            <td><a href="docs/<?= $g['filename']; ?>"> <?= $g['filename']; ?> <i class="fa fa-eye"></i></a> </td>
+                                            <td><a href="uploads/<?= $g['filename']; ?>"> <?= $g['filename']; ?> </a> <?= $g['filename']; ?> </td>
                                             
                                         </tr>
                                         <?php } ?>

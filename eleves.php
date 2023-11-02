@@ -33,6 +33,8 @@
 
         <!-- Sidebar -->
        <?php include 'part/_menu.php' ?>
+       <?php $reque=$db->query("SELECT * FROM payement"); ?>
+       <?php $rep=$db->query("SELECT * FROM payement"); ?>
 
 
        <?php 
@@ -138,6 +140,82 @@ if (isset($_POST['submit'])) {
  ?>
 
 
+<?php 
+
+if (isset($_POST['modif'])) {
+    extract($_POST);
+    $nom_complet = htmlspecialchars($_POST['nom_complet']);
+	$sexe = htmlspecialchars($_POST['sexe']);
+	$lieu_naiss = htmlspecialchars($_POST['lieu_naiss']);
+	$date_naiss = htmlspecialchars($_POST['date_naiss']);
+    $responsable = htmlspecialchars($_POST['responsable']);
+    $contact = htmlspecialchars($_POST['contact']);
+    $adresse = htmlspecialchars($_POST['adresse']);
+    
+    $ref_classe = htmlspecialchars($_POST['ref_classe']);
+    $montant = htmlspecialchars($_POST['montant']);
+    $ref_option = htmlspecialchars($_POST['ref_option']);
+    $id_eleves = htmlspecialchars($_POST['id_eleves']);
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['password']);
+
+
+    $mo=$db->prepare("UPDATE eleves SET nom_complet=:nom_complet,sexe=:sexe,lieu_naiss=:lieu_naiss,date_naiss=:date_naiss,responsable=:responsable,contact=:contact,adresse=:adresse,ref_classe=:ref_classe,montant=:montant,ref_option=:ref_option,email=:email,password=:password WHERE id_eleves=:id_eleves");
+
+    $mo->execute(array(
+        'nom_complet' => $nom_complet,
+    'sexe'=> $sexe,
+    'lieu_naiss' => $lieu_naiss,
+    'date_naiss' => $date_naiss,
+    'responsable' => $responsable,
+	'adresse' => $adresse,
+    
+    'contact' => $contact,
+    
+    'ref_classe' => $ref_classe,
+    'montant' => $montant,
+    'ref_option' => $ref_option,
+    'id_eleves' => $id_eleves,
+    'email' => $email,
+    'password' => $password
+    ));
+
+    
+
+
+}
+
+
+?>
+
+
+
+<?php 
+
+if (isset($_POST['del'])) {
+    extract($_POST);
+
+    $id_eleves = htmlspecialchars($_POST['id_eleves']);
+
+
+
+    $det=$db->prepare("DELETE FROM eleves WHERE id_eleves=:id_eleves");
+
+    $det->execute(array(
+
+    'id_eleves' => $id_eleves
+
+    ));
+
+    
+
+
+}
+
+
+?>
+
+
 
 
 
@@ -190,23 +268,157 @@ if (isset($_POST['submit'])) {
                                             
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                             <th>num</th>
-                                            <th>nom_complet</th>
-                                            <th>Sexe</th>
-                                            <th>Lieu naissance</th>
-                                            <th>Date naissance</th>
-                                            <th>Responsable</th>
-                                            <th>Adresse</th>
-                                            <th>Photo</th>
-                                            <th>Action</th>
-                                            
-                                        </tr>
-                                    </tfoot>
+                                    
                                     <tbody>
-                                    <?php $requete=$db->query("SELECT * FROM eleves"); ?>
+                                    <?php $requete=$db->query("SELECT * FROM eleves INNER JOIN classe ON eleves.ref_classe=classe.id_classe INNER JOIN options ON eleves.ref_option=options.id_option"); ?>
                                     <?php while ($g = $requete->fetch()) { ?>
+                                           
+                                        <div class="modal fade bs-ex<?= $g['id_eleves']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modifier l'eleve <?= $g['nom_complet'];?> </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+
+                        <input type="hidden" name="id_eleves" value="<?= $g['id_eleves'];?>">
+                          
+                          <div class="row">
+                            <div class="col-md-12">                            
+                               <input class="form-control" name="nom_complet" type="text" value="<?= $g['nom_complet'];?>" placeholder="Nomcomplet">
+                              </div>
+                        </div>
+                          <br>
+                        <div class="row">
+                              <div class="col-md-6">
+                            <label for="">Sexe</label>
+                               <select class="form-control" name="sexe">
+                               
+                                <option value="<?= $g['sexe'];?>"><?= $g['sexe'];?></option>
+                                <option value="masculin">Masculin</option>
+                                <option value="Feminin">Feminin</option>
+                               </select>
+                              </div>
+                              <div class="col-md-6">
+                                <label for="">Lieu de naissance</label>
+                                 <input class="form-control" type="text" name="lieu_naiss" value="<?= $g['lieu_naiss'];?>">
+                              </div>
+                              
+                          </div>
+                          <br>
+                          <div class="row">
+                            
+                              <div class="col-md-6">
+                                <label for="">Date de naissance</label>
+                               <input class="form-control" name="date_naiss" type="date" value="<?= $g['date_naiss'];?>" placeholder="Date naissance">
+                              </div>
+                              <div class="col-md-6"> 
+                                <label for="">Montant d'inscription</label>    
+                                <select class="form-control" name="montant" id="">
+                                    <option value="<?= $g['montant'];?>"><?= $g['montant'];?> $</option>
+                                    
+                                    <?php while ($gg = $reque->fetch()) {
+                                         $ss= $gg['id_classe'];
+                                         $te = "";
+                                         if($ss == '1'){ 
+                                            $te="<span>ere</span>";
+                                         } else {
+                                             $te="<span>eme</span>";
+                                         }
+                                        
+                                        ?>
+                                <option value="<?= $gg['montant'];?>"><?= $gg['id_classe'];?> <?php echo $te; ?> - <?= $gg['montant'];?> $</option>
+                                <?php } ?>
+                                </select>                       
+                               
+                              </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            <div class="col-md-6">   
+                                <label for="">Responsable</label>                         
+                               <input class="form-control" name="responsable"  type="text" value="<?= $g['responsable'];?>" placeholder="Responsable">
+                              </div>
+                              <div class="col-md-6">
+                              <label for="">Contact responsable</label>
+                               <input class="form-control" name="contact" type="number" value="<?= $g['contact'];?>" placeholder="Contact responsable">
+                              </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            
+                          <div class="col-md-6">
+                            <label for="">Options</label>
+                          <select class="form-control" name="ref_option" id="">
+                          <option value="<?= $g['id_option'];?>"><?= $g['nom_option'];?></option>
+
+
+                          <?php $reo=$db->query("SELECT * FROM options"); ?>
+                             
+                               
+                               
+                                    <?php while ($goo = $reo->fetch()) { ?>
+                                <option value="<?= $goo['id_option'];?>"><?= $goo['nom_option'];?></option>
+                                <?php } ?>
+                               </select>
+                          
+                              
+                               
+                              
+                              </div>
+                              <div class="col-md-6">
+                                <label for="">Classe</label>
+                                <select class="form-control" name="ref_classe" id="">
+                                <option value="<?= $g['id_classe'];?>"><?= $g['nom_classe'];?></option>
+                                <?php $recla=$db->query("SELECT * FROM classe"); ?>
+                               
+                                    <?php while ($gc = $recla->fetch()) { ?>
+                                <option value="<?= $gc['id_classe'];?>"><?= $gc['nom_classe'];?></option>
+                                <?php } ?>
+                               </select>
+
+                              
+                           </div>
+                              
+                          <br>
+                          <br>
+                          <div class="row">
+                            <div class="col-md-6">
+                                <label for="">Email</label>
+                                <input class="form-control" name="email" type="email" value="<?= $g['email'];?>">
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Mot de pase</label>
+                            <input class="form-control" name="password" type="text" value="<?= $g['password'];?>">
+                            </div>
+
+                          </div>
+                          <br>
+                          
+
+                              <div class="col-md -12">
+                                <label for="">Adresse</label>
+                          <input class="form-control" name="adresse" type="text" value="<?= $g['adresse'];?>" placeholder="Adresse">
+                          </div>
+                            
+                          </div>
+    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="modif" class="btn btn-warning">Modifier</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
                                            <!-- <h1>Modal fichier</h1> -->
 
@@ -242,6 +454,80 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
 
+
+
+
+
+        <div class="modal fade bs<?= $g['id_eleves']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Suppression de <?= $g['nom_complet'];?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                            <input type="hidden" name="id_eleves" value="<?= $g['id_eleves'];?>">
+                          
+                          <div class="row">
+                            <div class="col-md-6"> 
+                                <label for="">Etes vous sur de vouloir supprimer <?= $g['nom_complet']; ?> ??</label>                           
+                              
+                              </div>
+                              
+                        </div>
+                          <br>
+    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="del" class="btn btn-success">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="modal fade bs-pict<?= $g['id_eleves']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modifier la photo de <?= $g['nom_complet'];?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <form action="uph.php" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="id_eleves" value="<?= $g['id_eleves'];?>">
+                          
+                          <div class="row">
+                            <div class="col-md-6">                            
+                               <input class="form-control" name="nom_complet" type="text" value="<?= $g['nom_complet']; ?>" disabled>
+                              </div>
+                              <div class="col-md-6">
+                                <input class="form-control" type="file" name="file">
+                              </div>
+                        </div>
+                          <br>
+    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="picture" class="btn btn-primary">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
                                            <!-- <h1>Fin modal fichier</h1> -->
 
                                         <tr>
@@ -257,9 +543,10 @@ if (isset($_POST['submit'])) {
                                                 <img width="50px;" src="prof/<?= $g['photo']; ?>" alt="">
                                             </td>
                                             <td>
-                                            <button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-pen"></i></button>
-                                            <button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-trash"></i></button>
+                                            <button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target=".bs-ex<?= $g['id_eleves']; ?>"><i class="fa fa-pen"></i></button>
+                                            <button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target=".bs<?= $g['id_eleves']; ?>"><i class="fa fa-trash"></i></button>
                                             <button type="button" class="btn btn-primary btn-circle btn-sm" data-toggle="modal" data-target=".bs-example<?= $g['id_eleves']; ?>"><i class="fa fa-file"></i></button>
+                                            <button type="button" class="btn btn-info btn-circle btn-sm" data-toggle="modal" data-target=".bs-pict<?= $g['id_eleves']; ?>"><i class="fa fa-image"></i></button>
                                             <a class="btn btn-success btn-circle btn-sm" href="pcard.php?idp=<?= $g['id_eleves']; ?>"> <i class="fa fa-print"></i> </a>
 
                                             </td>
@@ -353,12 +640,12 @@ if (isset($_POST['submit'])) {
                           <div class="row">
                             
                           <div class="col-md-6">
-                          <?php $reque=$db->query("SELECT * FROM payement"); ?>
+
                                <select class="form-control" name="montant" id="">
                                
                                <option value="">--montant inscription--</option>
-                                    <?php while ($gg = $reque->fetch()) {
-                                         $ss= $gg['id_classe'];
+                                    <?php while ($gp = $rep->fetch()) {
+                                         $ss= $gp['id_classe'];
                                          $te = "";
                                          if($ss == '1'){ 
                                             $te="<span>ere</span>";
@@ -367,7 +654,7 @@ if (isset($_POST['submit'])) {
                                          }
                                         
                                         ?>
-                                <option value="<?= $gg['montant'];?>"><?= $gg['id_classe'];?> <?php echo $te; ?> - <?= $gg['montant'];?> $</option>
+                                <option value="<?= $gp['montant'];?>"><?= $gp['id_classe'];?> <?php echo $te; ?> - <?= $gp['montant'];?> $</option>
                                 <?php } ?>
                                </select>
                               </div>
